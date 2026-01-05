@@ -5,6 +5,7 @@ import patientRoutes from './routes/patientRoutes';
 import treatmentRoutes from './routes/treatmentRoutes';
 import appointmentRoutes from './routes/appointmentRoutes';
 import statsRoutes from './routes/statsRoutes';
+import aiRoutes from './routes/aiRoutes';
 import { HTTPError } from './utils/errors';
 import { createApiError } from './types/api';
 
@@ -38,6 +39,7 @@ app.route('/api/patients', patientRoutes);
 app.route('/api/treatments', treatmentRoutes);
 app.route('/api/appointments', appointmentRoutes);
 app.route('/api/stats', statsRoutes);
+app.route('/api/ai', aiRoutes);
 
 // Connect to database on startup
 connectDatabase().catch((error) => {

@@ -6,13 +6,29 @@ import { validateRequiredFields } from '../utils/validation';
 import { CreateAppointmentRequest, UpdateAppointmentRequest, AppointmentQueryParams } from '../types/appointment';
 
 /**
+ * Serialized appointment type for API responses (only id, no _id)
+ */
+export type SerializedAppointment = Omit<Appointment, '_id'> & { id: string };
+
+/**
+ * Serialize appointment for API response (convert _id to id as string, remove _id)
+ */
+function serializeAppointment(appointment: Appointment): SerializedAppointment {
+    const { _id, ...rest } = appointment;
+    return {
+        ...rest,
+        id: _id?.toString() || ''
+    };
+}
+
+/**
  * Service for appointment-related business logic
  */
 export class AppointmentService {
     /**
      * Get all appointments with optional filters
      */
-    static async getAllAppointments(params: AppointmentQueryParams): Promise<Appointment[]> {
+    static async getAllAppointments(params: AppointmentQueryParams): Promise<SerializedAppointment[]> {
         if (!appointmentsCollection) {
             throw new HTTPError('Database not initialized', 500, 'Database Error');
         }
@@ -31,13 +47,14 @@ export class AppointmentService {
             Object.assign(query, dateRangeQuery);
         }
 
-        return await appointmentsCollection.find(query).sort({ date: 1 }).toArray();
+        const appointments = await appointmentsCollection.find(query).sort({ date: 1 }).toArray();
+        return appointments.map(serializeAppointment);
     }
 
     /**
      * Get appointment by ID
      */
-    static async getAppointmentById(id: string): Promise<Appointment> {
+    static async getAppointmentById(id: string): Promise<SerializedAppointment> {
         if (!appointmentsCollection) {
             throw new HTTPError('Database not initialized', 500, 'Database Error');
         }
@@ -48,13 +65,13 @@ export class AppointmentService {
             throw new HTTPError('Appointment not found', 404, 'Not Found');
         }
 
-        return appointment;
+        return serializeAppointment(appointment);
     }
 
     /**
      * Create a new appointment
      */
-    static async createAppointment(data: CreateAppointmentRequest): Promise<Appointment> {
+    static async createAppointment(data: CreateAppointmentRequest): Promise<SerializedAppointment> {
         if (!appointmentsCollection) {
             throw new HTTPError('Database not initialized', 500, 'Database Error');
         }
@@ -76,13 +93,13 @@ export class AppointmentService {
             throw new HTTPError('Failed to create appointment', 500, 'Server Error');
         }
 
-        return createdAppointment;
+        return serializeAppointment(createdAppointment);
     }
 
     /**
      * Update an appointment
      */
-    static async updateAppointment(id: string, data: UpdateAppointmentRequest): Promise<Appointment> {
+    static async updateAppointment(id: string, data: UpdateAppointmentRequest): Promise<SerializedAppointment> {
         if (!appointmentsCollection) {
             throw new HTTPError('Database not initialized', 500, 'Database Error');
         }
@@ -104,7 +121,7 @@ export class AppointmentService {
             throw new HTTPError('Appointment not found', 404, 'Not Found');
         }
 
-        return result;
+        return serializeAppointment(result);
     }
 
     /**
