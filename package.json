@@ -4,9 +4,8 @@
     "dev": "bun run --hot src/index.ts"
   },
   "dependencies": {
-    "hono": "^4.11.2",
-    "mongodb": "^7.0.0",
-    "openai": "^6.15.0"
+    "hono": "^4.11.3",
+    "mongodb": "^7.0.0"
   },
   "devDependencies": {
     "@types/bun": "latest"

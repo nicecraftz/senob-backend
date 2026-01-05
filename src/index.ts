@@ -4,7 +4,6 @@ import { connectDatabase, closeDatabase } from './database';
 import patientRoutes from './routes/patientRoutes';
 import treatmentRoutes from './routes/treatmentRoutes';
 import appointmentRoutes from './routes/appointmentRoutes';
-import aiRoutes from './routes/aiRoutes';
 import statsRoutes from './routes/statsRoutes';
 import { HTTPError } from './utils/errors';
 import { createApiError } from './types/api';
@@ -38,7 +37,6 @@ app.get('/health', (c) => {
 app.route('/api/patients', patientRoutes);
 app.route('/api/treatments', treatmentRoutes);
 app.route('/api/appointments', appointmentRoutes);
-app.route('/api/ai', aiRoutes);
 app.route('/api/stats', statsRoutes);
 
 // Connect to database on startup

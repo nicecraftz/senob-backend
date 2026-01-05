@@ -64,7 +64,6 @@ async function createIndexes(): Promise<void> {
         await treatmentsCollection?.createIndex({ date: 1 });
         
         // Appointments indexes
-        await appointmentsCollection?.createIndex({ id: 1 }, { unique: true });
         await appointmentsCollection?.createIndex({ patientId: 1 });
         await appointmentsCollection?.createIndex({ date: 1 });
 

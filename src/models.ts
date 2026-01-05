@@ -28,14 +28,14 @@ export interface Treatment {
     date: string | Date;
     content: string;
     attachemnts: TreatmentAttachment[]; // Note: matches frontend typo
-    aiAnalysis?: string | null; // AI-generated analysis of the treatment
     createdAt?: Date;
     updatedAt?: Date;
 }
 
+import { ObjectId } from 'mongodb';
+
 export interface Appointment {
-    _id?: string;
-    id: number;
+    _id?: ObjectId | string;
     patientId: number;
     date: Date;
     createdAt?: Date;
